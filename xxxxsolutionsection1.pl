@@ -22,3 +22,29 @@ station(ws, [northern, victoria]).
 
 %Checks to see if a predicate for station X exists
 station_exists(X) :- station(X, _).
+
+adj(wa, pa).
+adj(pa, oc).
+adj(nh, lg).
+adj(lg, oc).
+adj(br, vi).
+adj(vi, oc).
+adj(oc, em).
+adj(oc, tc).
+adj(oc, ws).
+adj(em, ke).
+adj(em, ec).
+adj(em, tc).
+adj(ws, tc).
+adj(ws, eu).
+adj(ws, kx).
+adj(tc, cl).
+adj(cl, ls).
+adj(ls, al).
+adj(ls, bg).
+adj(ls, kx).
+adj(kx, fp).
+adj(kx, bs).
+adj(bs, fr).
+
+adjacent(X, Y) :- adj(X, Y) ; adj(Y, X).
