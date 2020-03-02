@@ -114,11 +114,14 @@ station_numlines(Station, NumberOfLines) :- station(Station, Lines), length(Line
 %InterchangeStation = 'OC'.
 
 %adjacent2interchange checks to see if the station is not an interchange station. If it is then it returns false. Otherwise it looks for all of the adjacent interchange stations and returns them one at a time.
-adjacent2interchange(NonInterStation, InterchangeStation) :- station_numlines(NonInterStation, NumberOfLines), (NumberOfLines =:= 1), adjacent(InterchangeStation, NonInterStation), station_numlines(InterchangeStation, NumInterchangeLines), (NumInterchangeLines > 1).
+adjacent2interchange(NonInterStation, InterchangeStation) :- station_numlines(NonInterStation, NumberOfLines), (NumberOfLines == 1), adjacent(InterchangeStation, NonInterStation), station_numlines(InterchangeStation, NumInterchangeLines), (NumInterchangeLines > 1).
 
 %-------------------------------------------------------------------------------
 
+route(From, To, Route) :- rt(From, To, [], PartRoute), not(member(To, PartRoute)), Route = [To|PartRoute].
 
+rt(From, To, TempRt, Route) :- adjacent(To, From), not(member(From, TempRt)), Route = [From|TempRt].
+rt(From, To, TempRt, Route) :- adjacent(From, Next), not(member(Next, TempRt)), rt(Next, To, [From|TempRt], Route).
 
 
 
