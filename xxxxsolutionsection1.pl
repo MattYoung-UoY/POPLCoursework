@@ -117,14 +117,56 @@ station_numlines(Station, NumberOfLines) :- station(Station, Lines), length(Line
 adjacent2interchange(NonInterStation, InterchangeStation) :- station_numlines(NonInterStation, NumberOfLines), (NumberOfLines == 1), adjacent(InterchangeStation, NonInterStation), station_numlines(InterchangeStation, NumInterchangeLines), (NumInterchangeLines > 1).
 
 %-------------------------------------------------------------------------------
+%Test Cases
+%route('TC', 'CL', Route).
+%Route = ['TC', 'CL'] ;
+%Route = ['TC', 'OC', 'WS', 'KX', 'LS', 'CL'] ;
+%Route = ['TC', 'EM', 'OC', 'WS', 'KX', 'LS', 'CL'] ;
+%Route = ['TC', 'WS', 'KX', 'LS', 'CL'] ;
+%false.
 
-route(From, To, Route) :- rt(From, To, [], PartRoute), not(member(To, PartRoute)), Route = [To|PartRoute].
+%route('OC', 'CL', Route).
+%Route = ['OC', 'EM', 'TC', 'CL'] ;
+%Route = ['OC', 'EM', 'TC', 'WS', 'KX', 'LS', 'CL'] ;
+%Route = ['OC', 'TC', 'CL'] ;
+%Route = ['OC', 'TC', 'WS', 'KX', 'LS', 'CL'] ;
+%Route = ['OC', 'WS', 'TC', 'CL'] ;
+%Route = ['OC', 'WS', 'KX', 'LS', 'CL'] ;
+%false.
 
+%route calls the recursive function rt, appends the last station to the list, and then reverses the result, so that it is the correct order.
+route(From, To, Route) :- rt(From, To, [], PartRoute), not(member(To, PartRoute)), reverse([To|PartRoute], Route).
+
+%Base case (To and From are adjacent stations). Appends station From to the temporary route and then sets Route to this list.
 rt(From, To, TempRt, Route) :- adjacent(To, From), not(member(From, TempRt)), Route = [From|TempRt].
+%Recursive case. Gets all of the possible nodes that could be next in the list. Checks to see if this next node is not already in the list. Adds it to the list and then recursively calls the rt function with Next as the value for the From parameter.
 rt(From, To, TempRt, Route) :- adjacent(From, Next), not(member(Next, TempRt)), rt(Next, To, [From|TempRt], Route).
 
+%-------------------------------------------------------------------------------
+%Test Cases
+%route_time('FR', 'OC', Route, Minutes).
+%Route = ['FR', 'BS', 'KX', 'WS', 'OC'],
+%Minutes = 16 ;
+%Route = ['FR', 'BS', 'KX', 'WS', 'TC', 'OC'],
+%Minutes = 20 ;
+%Route = ['FR', 'BS', 'KX', 'WS', 'TC', 'EM', 'OC'],
+%Minutes = 24 ;
+%Route = ['FR', 'BS', 'KX', 'LS', 'CL', 'TC', 'OC'],
+%Minutes = 24 ;
+%Route = ['FR', 'BS', 'KX', 'LS', 'CL', 'TC', 'EM', 'OC'],
+%Minutes = 28 ;
+%Route = ['FR', 'BS', 'KX', 'LS', 'CL', 'TC', 'WS', 'OC'],
+%Minutes = 28 ;
+%false.
 
+%route_time('BR', 'VI', Route, Minutes).
+%Route = ['BR', 'VI'],
+%Minutes = 4 ;
+%false.
 
+%route_time uses the route function from the previous question to find the route.
+%It then finds the length of the route, subtracts one to find the number of trains, and then multiplies the number of trains by 4 to find the journey time.
+route_time(From, To, Route, Minutes) :- route(From, To, Route), length(Route, RtLen), Trains is RtLen - 1, Minutes is 4 * Trains.
 
 
 
