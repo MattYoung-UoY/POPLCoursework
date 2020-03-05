@@ -1,0 +1,9 @@
+#lang racket
+
+(define (a-game amount)
+  (cond
+    [(< amount 2) (error "amount lt 2")]
+    [(> amount 30) (error "amount gt 30")]
+    [else (let ([number amount]) number)]
+  )
+)
