@@ -16,24 +16,43 @@ Remember, in the game, if the player wins, then he scores 1 point [Game Machine 
 If the player loses, then he will lose 2 points [Game Machine will deduct 2 pounds from player's account(number), and add 1 pound in its account].
 During the game, if the player doesn't have any credit, then the game ends. The player can start a new game by re-register with a deposit.
 Generating a random number is now requested. Game Machine is about to generate a random number and compare it with the player's number.")
-         (let ([number amount]) number)
-         (newline)
-         (define (the-game-number request)
-           (cond
-             [(equal? request 'randomnum) (display "randomnum")]
-             [(equal? request 'increasemoney) (display "increasemoney")]
-             [(equal? request 'decreasemoney) (display "decreasemoney")]
-             [(equal? request 'topup) (display "topup")]
-             [else (error "Oop")]
+         (let ([number amount])
+           (begin
+             (newline)
+             (define (the-game-number request)
+               (cond
+                 [(equal? request 'randomnum)
+                  (define (randomnum randnum)
+                    (begin
+                      (let([random (+ 2 (random 49))])
+                        (begin
+                          (display "The random number is: ")
+                          (display random)
+                          (newline)
+                          (display "Game Player, your number is: ")
+                          (display number)
+                          (newline)
+                          (newline)
+                          (display "If your number is less than or equal the random number, you lose, otherwise you win.")
+                          (newline)
+                          (cond
+                            [(or (< number random) (equal? number random)) (display "Unfortunately, you have lost, Game Machine will deduct 2 pounds from your account.")]
+                            [else (display "Great, you have won, Game Machine will add one pound in your account.")]
+                          )
+                        )
+                      )
+                    )
+                  ) randomnum]
+                 [(equal? request 'increasemoney) (display "increasemoney")]
+                 [(equal? request 'decreasemoney) (display "decreasemoney")]
+                 [(equal? request 'topup) (display "topup")]
+                 [else (error "unknown request" request)]
+                 )
+               ) the-game-number
              )
            )
-         the-game-number
-       )
+         )
        ]
     )
   )
 )
-
-;Examples:
-;(define P1 (a-game 30))
-;(define P2 (a-game 40))
