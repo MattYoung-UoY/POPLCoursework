@@ -1,5 +1,7 @@
 #lang racket
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
 (define (a-game amount)
   (begin
     (display "You decided to go with the number ")
@@ -15,8 +17,23 @@ If the player loses, then he will lose 2 points [Game Machine will deduct 2 poun
 During the game, if the player doesn't have any credit, then the game ends. The player can start a new game by re-register with a deposit.
 Generating a random number is now requested. Game Machine is about to generate a random number and compare it with the player's number.")
          (let ([number amount]) number)
+         (newline)
+         (define (the-game-number request)
+           (cond
+             [(equal? request 'randomnum) (display "randomnum")]
+             [(equal? request 'increasemoney) (display "increasemoney")]
+             [(equal? request 'decreasemoney) (display "decreasemoney")]
+             [(equal? request 'topup) (display "topup")]
+             [else (error "Oop")]
+             )
+           )
+         the-game-number
        )
        ]
     )
   )
 )
+
+;Examples:
+;(define P1 (a-game 30))
+;(define P2 (a-game 40))
