@@ -23,28 +23,41 @@ Generating a random number is now requested. Game Machine is about to generate a
                (cond
                  [(equal? request 'randomnum)
                   (define (randomnum randnum)
-                    (begin
-                      (let([random (+ 2 (random 49))])
-                        (begin
-                          (display "The random number is: ")
-                          (display random)
-                          (newline)
-                          (display "Game Player, your number is: ")
-                          (display number)
-                          (newline)
-                          (newline)
-                          (display "If your number is less than or equal the random number, you lose, otherwise you win.")
-                          (newline)
-                          (cond
-                            [(or (< number random) (equal? number random)) (display "Unfortunately, you have lost, Game Machine will deduct 2 pounds from your account.")]
-                            [else (display "Great, you have won, Game Machine will add one pound in your account.")]
-                          )
+                    (let([random (+ 2 (random 49))])
+                      (begin
+                        (display "The random number is: ")
+                        (display random)
+                        (newline)
+                        (display "Game Player, your number is: ")
+                        (display number)
+                        (newline)
+                        (newline)
+                        (display "If your number is less than or equal the random number, you lose, otherwise you win.")
+                        (newline)
+                        (cond
+                          [(or (< number random) (equal? number random)) (display "Unfortunately, you have lost, Game Machine will deduct 2 pounds from your account.")]
+                          [else (display "Great, you have won, Game Machine will add one pound in your account.")]
                         )
                       )
                     )
                   ) randomnum]
                  [(equal? request 'increasemoney) (display "increasemoney")]
-                 [(equal? request 'decreasemoney) (display "decreasemoney")]
+                 [(equal? request 'decreasemoney)
+                  (begin
+                    (display "Game Player, previously you had: ")
+                    (display number)
+                    (display " pound(s)")
+                    (newline)
+                    (newline)
+                    (display "You have lost, Game Machine is deducting 2 pounds from your account!")
+                    (set! number (- number 2))
+                    (newline)
+                    (newline)
+                    (display "You now have: ")
+                    (display number)
+                    (display " pound(s)")
+                  )
+                 ]
                  [(equal? request 'topup) (display "topup")]
                  [else (error "unknown request" request)]
                  )
