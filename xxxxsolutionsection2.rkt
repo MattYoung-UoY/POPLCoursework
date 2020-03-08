@@ -1,7 +1,5 @@
 #lang racket
 
-;-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
 (define (a-game amount)
   (begin
     (display "You decided to go with the number ")
@@ -43,22 +41,59 @@ Generating a random number is now requested. Game Machine is about to generate a
                   ) randomnum]
                  [(equal? request 'increasemoney) (display "increasemoney")]
                  [(equal? request 'decreasemoney)
-                  (begin
-                    (display "Game Player, previously you had: ")
-                    (display number)
-                    (display " pound(s)")
-                    (newline)
-                    (newline)
-                    (display "You have lost, Game Machine is deducting 2 pounds from your account!")
-                    (set! number (- number 2))
-                    (newline)
-                    (newline)
-                    (display "You now have: ")
-                    (display number)
-                    (display " pound(s)")
-                  )
+                  (define decreasemoney
+                    (begin
+                      (display "Game Player, previously you had: ")
+                      (display number)
+                      (display " pound(s)")
+                      (newline)
+                      (newline)
+                      (display "You have lost, Game Machine is deducting 2 pounds from your account!")
+                      (set! number (- number 2))
+                      (newline)
+                      (newline)
+                      (display "You now have: ")
+                      (display number)
+                      (display " pound(s)")
+                      (newline)
+                      (cond
+                        [(> number 1) (display "You still have enough credit to play.")]
+                        [else (display "Sorry, you are out of credit, which you can't continue to play. To continue playing, you need to top-up. See you soon!!!")]
+                        )
+                      )
+                    ) decreasemoney
                  ]
-                 [(equal? request 'topup) (display "topup")]
+                 [(equal? request 'topup)
+                  (define (topup amount)
+                    (begin
+                      (let ([t amount])
+                        (begin
+                          (set! number t)
+                          (cond
+                            [(> number 2)
+                             (begin
+                               (display "Game Player, you just topped up: ")
+                               (display number)
+                               (display " pound(s)")
+                               (newline)
+                               (display "Great, you can play now")
+                             )
+                            ]
+                            [else
+                             (begin
+                               (display "Game Player, you just topped up: ")
+                               (display number)
+                               (display " pound(s)")
+                               (newline)
+                               (display "Wrong, number/amount should be a minimum of 2 pounds and a maximum of 30 pounds")
+                             )
+                            ]
+                          )
+                        )
+                      )
+                    )
+                  ) topup
+                 ]
                  [else (error "unknown request" request)]
                  )
                ) the-game-number
